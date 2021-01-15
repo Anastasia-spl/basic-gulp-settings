@@ -1,3 +1,6 @@
+// @@include('gulpSetWebp');
+// import dinamicAdapt from './dynamicAdapt_dev';
+
 function testWebP(callback) {
 
 var webP = new Image();
