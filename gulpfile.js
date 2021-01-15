@@ -92,10 +92,10 @@ function css() {
 
 function js() {
   return src(path.src.js)
+    .pipe(fileinclude())
     .pipe(babel({
         presets: ["@babel/preset-env"]
     }))
-    .pipe(fileinclude())
     .pipe(dest(path.build.js))
     .pipe(uglify())
     .pipe(rename({
