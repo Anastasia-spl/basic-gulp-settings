@@ -1,8 +1,4 @@
-@import 'normalize.scss';
-@import 'base.scss';
+@import '_normalize.scss';
+@import '_base.scss';
+@import '_mixins';
 @import 'fonts';
-@import 'mixins';
-
-body {
-  background-color: teal;
-}
