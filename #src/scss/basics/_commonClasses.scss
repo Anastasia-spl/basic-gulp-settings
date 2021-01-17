@@ -1,0 +1,47 @@
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  clip: react(0 0 0 0);
+  clip: rect(0px 0px 0px 0px);
+  overflow: hidden;
+}
+
+.html {
+  font-size: 62.5%;
+}
+
+.body {
+  background-color: getColor('white-color');
+  font-family: $primary-font;
+  font-size: 1.6rem;
+  font-display: fallback;
+  color: getColor('primary-dark-color');
+}
+
+.container {
+  // @include for-size(desktop)
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 2rem;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.list {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+.link {
+  text-decoration: none;
+}
