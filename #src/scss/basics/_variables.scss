@@ -1,19 +1,28 @@
+$header-min-height: 60px;
+
+// fonts
+$primary-font: 'Graphik', sans-serif;
+$secondary-font: 'Roboto', sans-serif;
+
+%headlines-font {
+	@include fontStyle(600, 5rem, 1.2, $primary-font);
+	@include adaptive-font(2, 5);
+}
+
 // animation
 $cubic: 250ms cubic-bezier(0.4, 0, 0.2, 1);
 
 // colors
 $colors: (
-  'primary-light-color': #ffffff,
-  'primary-dark-color': #000000,
-  'secondary-dark-color': #333333,
-  'secondary-text-light': rgba(255, 255, 255, 0.9),
-  'captions-on-light': rgba(51, 51, 51, 0.5),
-  'captions-on-dark': rgba(255, 255, 255, 0.5),
-  'decorative-color': #e8c300,
-  'background-forms': #e5e5e5,
-  'footer-bg-color': rgba(0, 0, 0, 0.9),
+	'primary-light-color': #ffffff,
+	'primary-dark-color': #000000,
+	'bg-accent': #ff9c7d,
+	'bg-secondary': #fff8e4,
+	'decorative-color': #ff6336,
+	'background-forms': #e5e5e5,
+	'footer-bg-color': #eeeeee,
 );
 
 @function getColor($key) {
-  @return map-get($colors, $key);
+	@return map-get($colors, $key);
 }

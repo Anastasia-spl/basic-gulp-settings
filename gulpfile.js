@@ -7,14 +7,14 @@ let path = {
     css: project_folder + '/css/',
     js: project_folder + '/js/',
     img: project_folder + '/img/',
-    fonts: project_folder + '/fonts/',
+    fonts: project_folder + '/fonts/'
   },
   src: {
     html: [source_folder + '/*.html', "!" + source_folder + "/_*.html"],
     css: source_folder + '/scss/style.scss',
     js: source_folder + '/js/script.js',
     img: source_folder + '/img/**/*.+(png|jpg|gif|ico|svg|webp)',
-    fonts: source_folder + '/fonts/*.ttf',
+    fonts: source_folder + '/fonts/*.+(ttf|otf)',
   },
   watch: {
     html: source_folder + '/**/*.html',
@@ -46,7 +46,6 @@ let { src, dest } = require('gulp'),
   babel = require('gulp-babel')
   ;
 
-
 function browserSync(params) {
   browsersync.init({
     server: {
@@ -63,6 +62,41 @@ function html() {
     .pipe(dest(path.build.html))
   .pipe(browsersync.stream())
 }
+function fonts() {
+   src(path.src.fonts)
+    .pipe(ttf2woff())
+    .pipe(dest(path.build.fonts))
+  return src(path.src.fonts)
+    .pipe(ttf2woff2())
+    .pipe(dest(path.build.fonts));
+}
+
+function fontsStyle(params) {
+  let file_content = fs.readFileSync(source_folder + '/scss/fonts.scss');
+  if (file_content == '') {
+  fs.writeFile(source_folder + '/scss/fonts.scss', '', cb);
+  return fs.readdir(path.build.fonts, function (err, items) {
+    if (items) {
+    let c_fontname;
+      for (var i = 0; i < items.length; i++) {
+      let fontname = items[i].split('.');
+      fontname = fontname[0];
+        if (c_fontname != fontname) {
+        fs.appendFile(source_folder + '/scss/fonts.scss', '@include font("' + fontname + '", "' + fontname + '", "400", "normal");\r\n', cb);
+        }
+        c_fontname = fontname;
+      }
+      }
+  })
+  }
+}
+
+ function cb() {
+ }
+
+ // Можно поменять первый параментр - название шрифта.
+// !! Необходимо проверить и поменять font-weight !
+
 
 function css() {
   return src(path.src.css)
@@ -122,13 +156,18 @@ function images() {
   .pipe(browsersync.stream())
 }
 
-function fonts() {
-  src(path.src.fonts)
-    .pipe(ttf2woff())
-    .pipe(dest(path.build.fonts))
-  return src(path.src.fonts)
-    .pipe(ttf2woff2())
-    .pipe(dest(path.build.fonts))
+function makeSvgSprite() {
+  return gulp.src([source_folder + '/iconsprite/*.svg'])
+    .pipe(svgSprite({
+      mode: {
+        stack: {
+          sprite: "../icons/icons.svg",
+          example: true
+       }
+     }
+    }))
+    .pipe(dest(path.build.img))
+  .pipe(browsersync.stream())
 }
 
 function watchFiles(params) {
@@ -143,28 +182,6 @@ function clean(params) {
   return del(path.clean);
 }
 
-function fontsStyle(params) {
-  let file_content = fs.readFileSync(source_folder + '/scss/fonts.scss');
-  if (file_content == '') {
-  fs.writeFile(source_folder + '/scss/fonts.scss', '', cb);
-  return fs.readdir(path.build.fonts, function (err, items) {
-  if (items) {
-  let c_fontname;
-  for (var i = 0; i < items.length; i++) {
-  let fontname = items[i].split('.');
-  fontname = fontname[0];
-  if (c_fontname != fontname) {
-  fs.appendFile(source_folder + '/scss/fonts.scss', '@include font("' + fontname + '", "' + fontname + '", "400", "normal");\r\n', cb);
-  }
-  c_fontname = fontname;
-  }
-  }
-  })
-  }
-}
-function cb() {
-}
-
 gulp.task('otf2ttf', function () { 
   return gulp.src([source_folder + '/fonts/*.otf'])
     .pipe(fonter({
@@ -174,22 +191,11 @@ gulp.task('otf2ttf', function () {
   
 })
 
-gulp.task('svgSprite', function () {
-  return gulp.src([source_folder + '/iconsprite/*.svg'])
-    .pipe(svgSprite({
-      mode: {
-        stack: {
-          sprite: "../icons/icons.svg",
-          example: true
-       }
-     }
-    }))
-    .pipe(dest(path.build.img))
-})
 
-let build = gulp.series(clean, gulp.parallel(js, css, html, images, fonts), fontsStyle); 
+let build = gulp.series(clean, gulp.parallel(js, css, html, images, fonts, makeSvgSprite), fontsStyle); 
 let watch = gulp.parallel(build, watchFiles, browserSync);
 
+exports.makeSvgSprite = makeSvgSprite;
 exports.fontsStyle = fontsStyle;
 exports.fonts = fonts;
 exports.images = images;

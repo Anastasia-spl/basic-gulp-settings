@@ -1,3 +1,4 @@
+// куда? (класс объекта) , каким по счету должен стать? (одна цифра/ first/last) , когда? (ширина экрана) 
 class DynamicAdapt {
   constructor(type) {
     this.type = type;
