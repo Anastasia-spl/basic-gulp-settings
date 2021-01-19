@@ -1,3 +1,5 @@
+//@include fontStyle(600, 1.6rem, 2.81, $primary-font);
+
 .header {
 	position: fixed;
 	top: 0;
@@ -71,22 +73,37 @@
 }
 
 .nav__mobile {
-	opacity: 0;
-	visibility: hidden;
-	pointer-events: none;
-	position: absolute;
-	z-index: 60;
-	top: $header-min-height;
-	left: 0;
-	right: 0;
+	&-overlay {
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+		position: fixed;
+		z-index: 60;
+		top: -100%;
+		left: 0;
+		right: 0;
+		height: 100%;
+		background-color: rgba(0,0,0,0.35);
+	transition: all $cubic;
+
+		&.is-open {
+			opacity: 1;
+			pointer-events: all;
+			visibility: visible;
+		top: $header-min-height;
+
+			.nav__mobile {
+				transform: scale(1)
+			}
+		}
+	}
 	background-color: getColor(bg-accent);
 	text-align: center;
-	padding: 1rem 0;
-	&.is-open {
-		opacity: 1;
-		pointer-events: all;
-		visibility: visible;
-	}
+	padding: 2rem 0;
+	box-shadow: 0px 1px 1px rgba(0,0,0,0.1), 0px 4px 4px rgba(0,0,0,0.08), 1px 4px 6px rgba(0,0,0,0.12);
+	transform: scale(0.8);
+	transition: all $cubic 100ms;
+
 }
 
 .nav__list {
